@@ -4,14 +4,12 @@ import psycopg2
 
 # PATH ENFORCEMENT
 DATABASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 DATABASE = os.path.join(DATABASE_DIR, 'database.db')
 SCHEMA = os.path.join(os.path.dirname(DATABASE_DIR), 'schema.sql')
-
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 
-#THE DUAL COMPATIBILITY (SQLITE & POSTGRES):
+#THE DUAL COMPATIBILITY (SQLITE & POSTGRES)
 class HybridRow:
     """Acts like a tuple/list AND a dictionary simultaneously"""
     def __init__(self, row_tuple, column_names):
@@ -107,11 +105,9 @@ class PostgresConnectionAdapter:
 def get_db_connection():
     """Opens a connection to PostgreSQL in production, falling back to SQLite locally"""
     if DATABASE_URL:
-        # PRODUCTION: Connect to your cloud Postgres database
         raw_connection = psycopg2.connect(DATABASE_URL)
         return PostgresConnectionAdapter(raw_connection)
     else:
-        # DEVELOPMENT: Falls back to your local SQLite file seamlessly
         connection = sqlite3.connect(DATABASE)
         connection.row_factory = sqlite3.Row
         return connection
@@ -120,30 +116,18 @@ def get_db_connection():
 def init_db():
     """Creates the database tables based on schema.sql"""
     if DATABASE_URL:
-        raw_connection = psycopg2.connect(DATABASE_URL)
-        try:
-            with open(SCHEMA, mode='r', encoding='utf-8') as file:
-                sql_script = file.read()
-            # PostgreSQL requires individual statements split up or executed cleanly
-            with raw_connection.cursor() as cursor:
-                cursor.execute(sql_script)
-            raw_connection.commit()
-            print("Cloud Database Initialized Successfully!")
-        except Exception as e:
-            print(f"Cloud Database Initialization Warning: {e}")
-        finally:
-            raw_connection.close()
+        return True
     else:
         if not os.path.exists(DATABASE):
-            # Ensure local directory exists
             os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
             connection = sqlite3.connect(DATABASE)
+            
             try:
-                with open(SCHEMA, mode='r', encoding='utf-8') as file:
-                    connection.executescript(file.read())
-                connection.commit()
-                print("Local SQLite Database Initialized Successfully!")
-            except FileNotFoundError:
-                print("Error: schema.sql file not found!")
+                if os.path.exists(SCHEMA):
+                    with open(SCHEMA, mode='r', encoding='utf-8') as file:
+                        connection.executescript(file.read())
+                    connection.commit()
+            except Exception:
+                pass
             finally:
                 connection.close()
