@@ -11,6 +11,7 @@ from services.exporter.exporter import export_to_txt, export_to_docx, export_to_
 
 
 app = Flask(__name__)
+application = app
 app.config.from_object(config)
 app.config['SECRET_KEY'] = '0f9a2e6b7c8d4e5f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d'
 csrf = CSRFProtect(app)
