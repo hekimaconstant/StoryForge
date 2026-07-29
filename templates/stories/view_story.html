@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="/static/css/view_story.css">
+    <title>{{ story['title'] }}</title>
+    <h1>Story Details</h1>
+
+    <div class="story">
+        <div class="story-info">
+            <h3>Story Title: {{ story['title'] }} | Story Owner: <a class="view-user-link" name="user-id" href="/view-user?user-id={{ owner_id }}" target="_blank">{{ story['user_name']|default('Anonymous', true)|capitalize }}</a></h3>
+            
+            <form action="/view-story?story_id={{ story['owner_id'] }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this story?');" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="story_id" value="{{ story['story_id'] }}">
+                <button type="submit" name="delete-story" value="true" class="delete-btn">Delete Story</button>
+            </form>
+            
+            <div class="export-options" style="margin: 20px 0; display: flex; gap: 10px;">
+                <span>📥 Export Story:</span>
+                <a href="/story/{{ story_id }}/export/txt" class="btn btn-sm btn-outline-secondary">Text (.txt)</a>
+                <a href="/story/{{ story_id }}/export/docx" class="btn btn-sm btn-outline-primary">Word (.docx)</a>
+                <a href="/story/{{ story_id }}/export/pdf" class="btn btn-sm btn-outline-danger">PDF (.pdf)</a>
+            </div>
+
+            <img src="{{ story['thumbnail_url'] }}" alt="Story Thumnail">
+        </div>
+        <div>{{ story['content']|safe }}</div>
+    </div>
+
+    <script src="/static/js/view_story.js"></script>
+{% endblock %}

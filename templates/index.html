@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}StoryForge | Home{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/css/home_grid.css">
+
+    <div class="top-bar">
+        <form action="/" method="GET" class="search-form">
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                placeholder="Search stories or authors..."
+                value="{{ search_query }}"
+                required
+            >
+            <button type="submit" name = "search-btn" class="search-btn">Search</button>
+        </form>
+
+        <div class="category-filter-bar">
+            {% if not search_input %}
+                <form action="/" method="GET" style="display: flex; gap: 10px;">
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'all' %}active-chip{% endif %}" value="all">All</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'thriller' %}active-chip{% endif %}" value="thriller">Thriller</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'history' %}active-chip{% endif %}" value="history">History</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'romance' %}active-chip{% endif %}" value="romance">Romance</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'adventure' %}active-chip{% endif %}" value="adventure">Adventure</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'fantasy' %}active-chip{% endif %}" value="fantasy">Fantasy</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'action' %}active-chip{% endif %}" value="action">Action</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter == 'documentary' %}active-chip{% endif %}" value="documentary">Documentary</button>
+                    <button type="submit" name="genre-filter" class="filter-btn {% if genre_filter ==  'biography' %}active-chip{% endif %}" value="biography">Biography</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <section id="all-stories">
+        {% if stories %}
+            {% if search_input %}
+                <h2 style="margin-top: -10px;">Results for "{{ search_input }}"</h2>
+            {% endif %}
+            <div class="youtube-video-grid">
+                {% for story in stories %}
+                    <div class="story-card-wrapper">
+                        
+                        <a href="/view-story?story_id={{ story['story_id'] }}" class="card-thumbnail-link">
+                            {% if story['thumbnail_url'] %}
+                                <img src="{{ story['thumbnail_url'] }}" alt="Story Cover Artwork" class="card-image-asset">
+                            {% else %}
+                                <div class="card-fallback-asset">📖</div>
+                            {% endif %}
+                        </a>
+
+                        <div class="card-details-row">
+                            <div class="card-author-avatar">
+                                <a href="/view-user?user-id={{ story['author_id'] }}">
+                                    {% if logged_in %}
+                                        <img src="/static/image/avatars/{{ story['author_avatar'] }}" alt="">
+                                    {% else %}
+                                        <img src="/static/image/avatars/user.png" alt="">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="card-text-metadata">
+                                <h3 class="card-story-title">
+                                    <a href="/view-story?story_id={{ story['story_id'] }}">
+                                        {{ story['title'] }}
+                                    </a>
+                                </h3>
+                                <a href="/view-user?user-id={{ story['author_id'] }}">
+                                    <p class="card-author-name">{{ story['author_name']|capitalize }}</p>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-feed-fallback">
+                <p>No stories have been forged yet. Be the first to build a masterpiece!</p>
+                <a href="{{ url_for('create_story') }}" class="create-story-cta-btn">Forge First Story</a>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

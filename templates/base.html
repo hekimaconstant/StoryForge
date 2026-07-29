@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %} StoryForge {% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">
+                    <img src="/static/image/logo.png" alt="">
+                </a>
+            </div>
+
+            <!-- Hamburger Toggler -->
+            <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+            <label for="menu-toggle" class="hamburger-label">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <div class="nav-menu-wrapper">
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="{{ url_for('create_story') }}">Create Story+</a>
+                    <a href="/#all-stories">All stories</a>
+                    <a href="/about">About Us</a>
+                </div>
+                
+                {% if not session.get('logged_in') %}
+                    <div class="login-link">
+                        <button><a href="{{ url_for('login') }}">Login Or Register</a></button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-link">
+                <a href="/profile">
+                    <img src="/static/image/avatars/{{ avatar_name }}" alt="user_img">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 StoryForge</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,130 @@
+.avatar-selector-section {
+    margin: 24px 0;
+    text-align: left;
+}
+
+.avatar-selector-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #334155;
+}
+
+.dropdown-preview-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+}
+
+#avatar-live-preview {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #0284c7;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+#chosen_avatar {
+    flex-grow: 1;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1e293b;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+#chosen_avatar:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.feedback-msg {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.error-msg { color: #ef4444; }
+.success-msg { color: #22c55e; }
+
+.login-redirect-box {
+    margin-top: 15px;
+    padding: 12px;
+    background: #e6f4ea;
+    border-radius: 6px;
+    border: 1px solid #b7e1cd;
+}
+
+.login-redirect-box p {
+    margin: 0 0 6px 0;
+    color: #137333;
+}
+
+.login-redirect-box a {
+    color: #137333;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.debug-user-log {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Tablets and phones */
+@media screen and (max-width: 768px) {
+    .dropdown-preview-wrapper {
+        gap: 12px;
+        padding: 10px;
+    }
+    
+    #avatar-live-preview {
+        width: 55px;
+        height: 55px;
+    }
+    
+    #chosen_avatar {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .dropdown-preview-wrapper {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 12px;
+    }
+
+    #avatar-live-preview {
+        width: 75px;
+        height: 75px;
+        margin: 0 auto;
+    }
+
+    #chosen_avatar {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .login-redirect-box {
+        text-align: center;
+        padding: 10px;
+    }
+}

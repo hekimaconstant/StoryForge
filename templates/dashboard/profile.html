@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/profile.css">
+<title>User Profile Dashboard</title>
+<div class="profile-dashboard">
+
+    <!-- PROFILE CARD HEADER -->
+    <div class="profile-header-card">
+        <div class="user-avatar-placeholder">
+
+            <!-- PROFILE AVATAR CHANGER -->
+            <img id="profile-card-avatar" src="/static/image/avatars/{{ avatar_name }}" alt="user_img">
+        </div>
+        <div class="profile-user-details">
+            <h2>{{ login_text|default('Welcome back, Storyteller!', true) }}</h2>
+            <p class="account-status-tag">{% if logged_in %}Creator Account Active{% else %}Log in <a href="/login">HERE{% endif %}</a></p>
+        </div>
+        
+        {% if logged_in %}
+            <div class="header-actions-wrapper" style="margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 12px;">
+                
+                <form method="POST" class="logout-form-wrapper" style="margin: 0;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="logout" value="logout">
+                    <button type="submit" class="logout-btn">Log Out</button>
+                </form>
+
+                <form method="POST" style="margin: 0;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="profile-avatar-customizer" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15);">
+                        <label for="chosen_avatar" style="font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin: 0; white-space: nowrap; font-family: Arial, sans-serif;">Change Avatar</label>
+                        <select name="chosen_avatar" id="chosen_avatar" style="background: #1e293b; color: #ffffff; border: 1px solid #475569; border-radius: 12px; padding: 4px 6px; font-size: 0.75rem; cursor: pointer; outline: none; font-family: Arial, sans-serif;">
+                            <option value="avatar1.png" {% if avatar_name == 'avatar1.png' %}selected{% endif %}>Man 1</option>
+                            <option value="avatar2.png" {% if avatar_name == 'avatar2.png' %}selected{% endif %}>Man 2</option>
+                            <option value="avatar3.png" {% if avatar_name == 'avatar3.png' %}selected{% endif %}>Woman 1</option>
+                            <option value="avatar4.png" {% if avatar_name == 'avatar4.png' %}selected{% endif %}>Woman 2</option>
+                            <option value="avatar5.png" {% if avatar_name == 'avatar5.png' %}selected{% endif %}>Woman 3</option>
+                            <option value="avatar6.png" {% if avatar_name == 'avatar6.png' %}selected{% endif %}>Man 3</option>
+                            <option value="avatar7.png" {% if avatar_name == 'avatar7.png' %}selected{% endif %}>Woman 4</option>
+                            <option value="avatar8.png" {% if avatar_name == 'avatar8.png' %}selected{% endif %}>Woman 5</option>
+                            <option value="avatar9.png" {% if avatar_name == 'avatar9.png' %}selected{% endif %}>Woman 6</option>
+                            <option value="avatar10.png" {% if avatar_name == 'avatar10.png' %}selected{% endif %}>Man 4</option>
+                        </select>
+
+                        <button type="submit" name="change-avatar-btn" value="true" id="validate-avatar-btn" style="display: none; background: #22c55e; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.7rem; cursor: pointer; align-items: center; justify-content: center; font-weight: bold; padding: 0;">✔️</button>
+                        
+                        <span id="mini-save-indicator" style="font-size: 0.7rem; color: #38bdf8; font-weight: bold; display: none; font-family: Arial, sans-serif; margin-left: 2px;">Saved!</span>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="stats-row-container">
+        <div class="stat-card">
+            <span class="stat-icon">📚</span>
+            <div class="stat-info">
+                <h3>{{ user_stories|length }}</h3>
+                <p>Stories Published</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">⏱️</span>
+            <div class="stat-info">
+                <h3>{{ (user_stories|length * 3) }} min</h3>
+                <p>Est. Total Read Time</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">💾</span>
+            <div class="stat-info">
+                <h3>Cloud</h3>
+                <p>Storage Sync Enabled</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="stories-feed-section">
+        <h3>My Creative Library</h3>
+        
+        {% if user_stories %}
+            <div class="profile-stories-grid">
+                {% for story in user_stories %}
+                    <div class="profile-story-card">
+                        <div class="story-thumbnail-frame">
+                            {% if story['thumbnail_url'] %}
+                                <img src="{{ story['thumbnail_url'] }}" alt="Story Cover Artwork">
+                            {% else %}
+                                <div class="fallback-graphic-placeholder">📖</div>
+                            {% endif %}
+                        </div>
+                        <div class="story-card-body">
+                            <h4>{{ story[1] or story['title'] }}</h4>
+                            <a href="/view-story?story_id={{ story['story_id'] }}" class="read-story-action-btn">Read Story →</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-library-fallback">
+                <p>You haven't written any stories yet! Fire up the forge and make your first masterwork.</p>
+                <a href="/create-story" class="btn-create-first">Write A Story</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- MULTI-STEP PREVIEW MANAGEMENT SCRIPT -->
+<script src="/static/js/profile.js"></script>
+{% endblock %}

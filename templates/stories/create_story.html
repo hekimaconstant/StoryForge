@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/css/create_story.css">
+    <title>StoryForge | Create Story</title>
+
+    <!-- CREATION GENERATOR BOX CONTAINER -->
+    <div class="forge-container">
+        <section class="forge-form-card">
+            <h2>Forge a New Masterpiece</h2>
+            <p class="forge-subtitle">Fill out the parameters below to trigger your AI storyteller engine.</p>
+            
+            <form action="/create-story" method="post" class="main-forge-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group-row">
+                    <input type="text" name="instructions" placeholder="Enter prompt here..." required class="input-prompt">
+                </div>
+
+                <div class="form-group-fields">
+                    <select name="genre" id="genre" required>
+                        <option value="" selected hidden disabled>-Select Genre-</option>
+                        <option value="history">History</option>
+                        <option value="romance">Romance</option>
+                        <option value="thriller">Thriller</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="biography">Biography</option>
+                        <option value="documentary">Documentary</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="action">Action</option>
+                    </select>
+                    <input type="text" name="topic" placeholder="Topic..." required class="input-topic">
+                </div>
+                {% if not logged_in %}
+                    <p>Create an account <a href="/register">here</a> or log in <a href="/login">here</a> to save your progress</p>
+                {% endif %}
+                <button type="submit" name="create" value="publish" class="btn-create-submit">Create Story</button>
+            </form>
+        </section>
+
+
+        {% if title %}
+            <section class="preview-sandbox-card">
+                
+                <!--  FEEDBACK ALERT HEADER -->
+                {% if "successfully" in feedback_message %}
+                    <div class="feedback-notification success-alert">✨ {{ feedback_message }}</div>
+                {% else %}
+                    <div class="feedback-notification pending-alert">📝 {{ feedback_message }}</div>
+                {% endif %}
+                
+                <h1 class="preview-story-title">{{ title }}</h1>
+                
+                <!--  ART THUMBNAIL CONTAINER -->
+                <div class="preview-thumbnail-wrapper">
+                    <img src="{{ thumbnail_url }}" alt="Story Cover Thumbnail" class="preview-image-asset">
+                    <p>{{ genre_list }}</p>
+                </div>
+
+                <div class="preview-body-content">
+                    {{ content|safe }}
+                </div>
+
+                <hr class="preview-divider">
+                
+                <!-- THE SAVE OPTIONS TRANSACTION FORM -->
+                <form action="/create-story" method="POST" class="save-actions-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="hidden_title" value="{{ title }}">
+                    <input type="hidden" name="hidden_content" value="{{ content }}">
+                    <input type="hidden" name="hidden_thumbnail" value="{{ thumbnail_url }}">
+                    
+                    {% if "successfully" not in feedback_message %}
+                        <div class="save-story-container">
+                            <button type="submit" value="yes" name="yes" class="btn-save-confirm">Save to Library</button>
+                            <button type="submit" value="no" name="no" class="btn-save-discard">Don't Save</button>
+                        </div>
+                    {% else %}
+                        <div class="action-success-redirect-box">
+                            <a href="/" class="btn-back-home">Return to Feed</a>
+                            <a href="/profile" class="btn-view-profile">View in My Library</a>
+                            <a href="/view-story?story_id={{ story_id }}" class="btn-view-profile">View Story</a>
+                        </div>
+                    {% endif %}
+                </form>
+            </section>
+        {% endif %}
+    </div>
+{% endblock %}

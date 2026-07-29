@@ -1,0 +1,214 @@
+.login-form-container {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 15px 0 0 0;
+    padding: 0;
+}
+
+.login-box {
+    padding: 30px 30px 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    width: 350px;
+    max-width: 90vw;
+    text-align: center;
+    background-image: url('https://unsplash.com');
+    background-size: cover;
+    background-position: center;
+    font-family: "Times New Roman", Times, serif;
+    animation: fadeInBox 2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    z-index: 0;
+}
+
+.login-box > * {
+    position: relative;
+    z-index: 1;
+}
+
+.login-box fieldset {
+    border: 2px solid #200505;
+    padding: 8px 10px 20px 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+legend h2 {
+    font-size: 1.1em;
+    margin: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 7px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 2.5px solid #f4a5a5de;
+    font-size: 1em;
+}
+
+button {
+    background-color: #457550;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.login-form h1 {
+    display: none;
+}
+
+.login-form p {
+    margin-top: 8px;
+    font-size: 0.95em;
+}
+
+@keyframes fadeInBox {
+    from {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+.login-glow-backdrop {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.3) 0%, rgba(2, 132, 199, 0) 70%);
+    filter: blur(50px);
+    z-index: -1;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.company-branding-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    font-family: Arial, sans-serif;
+}
+
+.company-logo-graphic {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+}
+
+.company-title-text {
+    display: block !important;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .login-form {
+        margin-top: 10px;
+    }
+    .company-branding-header {
+        margin-bottom: 18px;
+    }
+    .company-logo-graphic {
+        width: 65px;
+        height: 65px;
+    }
+    .company-title-text {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .login-form-container {
+        padding: 10px;
+    }
+
+    .login-glow-backdrop {
+        width: 320px;
+        height: 320px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 320px;
+        padding: 24px 16px 16px 16px;
+        box-sizing: border-box;
+        border-radius: 16px;
+    }
+
+    .login-box fieldset {
+        padding: 4px 8px 16px 8px;
+        margin-bottom: 12px;
+    }
+
+    legend h2 {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 8px;
+        font-size: 0.95em;
+        margin-bottom: 14px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.95em;
+        font-weight: 600;
+    }
+    
+    .login-form p {
+        font-size: 0.85em;
+        line-height: 1.4;
+    }
+}

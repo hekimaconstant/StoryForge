@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+
+{% block title %}StoryForge | Login{% endblock %}
+
+{% block content %}
+<div class="login-form-container">
+    
+    <div class="login-glow-backdrop"></div>
+
+    <section class="login-form">
+        
+        <div class="company-branding-header">
+            <img src="/static/image/logo.png" alt="StoryForge Logo" class="company-logo-graphic">
+            <h1 class="company-title-text">StoryForge</h1>
+        </div>
+
+        <div class="login-box">
+            <fieldset>
+                <legend><h2>Welcome Back | Enter your details</h2></legend>
+                <form action="/login" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <label for="login-username">Username:</label>
+                    <input type="text" id="login-username" name="username" required>
+                    
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" name="password" required>
+                    
+                    <button type="submit" name="submit_btn">Log In</button>
+                    
+                    <p>By creating an account or logging in, you agree to our <a href="/terms">Terms of Service</a>.</p>
+                    <p>Don't have an Account? <a href="/register">Register</a></p>
+                    
+                    <p name="feedback_msg" style="color: red">{{ feedback_msg }}</p>
+                </form>
+            </fieldset>
+        </div>
+    </section>
+</div>
+{% endblock %}

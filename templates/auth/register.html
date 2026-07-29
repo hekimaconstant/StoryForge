@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/avatar_select.css">
+{% endblock %}
+
+{% block title %}StoryForge | Register{% endblock %}
+
+{% block content %}
+<div class="login-form-container">
+    <div class="company-branding-header">
+        <img src="/static/image/logo.png" alt="StoryForge Logo" class="company-logo-graphic">
+        <h1 class="company-title-text">StoryForge</h1>
+    </div>
+
+    <section class="login-form">
+        <div class="login-box">
+            <fieldset>
+                <legend><h2>Create account</h2></legend>
+                <p>To create an account, please fill out the form below.</p>
+                
+                <form action="/register" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <h2>Create a new account</h2>
+                    
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="password1">Password:</label>
+                    <input type="password" id="password1" name="password1" required minlength="8">
+                    
+                    <label for="password2">Repeat Password:</label>
+                    <input type="password" id="password2" name="password2" required minlength="8">
+
+
+                    <div class="avatar-selector-section">
+                        <label for="chosen_avatar">Choose Your Profile Character:</label>
+                        
+                        <div class="dropdown-preview-wrapper">
+                            <img id="avatar-live-preview" src="/static/image/avatars/avatar1.png" alt="Profile Preview">
+
+                            <select name="chosen_avatar" id="chosen_avatar">
+                                <option value="avatar1.png" selected>Man 1</option>
+                                <option value="avatar2.png">Man 2</option>
+                                <option value="avatar3.png">Woman 1</option>
+                                <option value="avatar4.png">Woman 2</option>
+                                <option value="avatar5.png">Woman 3</option>
+                                <option value="avatar6.png">Man 3</option>
+                                <option value="avatar7.png">Woman 4</option>
+                                <option value="avatar8.png">Woman 5</option>
+                                <option value="avatar9.png">Woman 6</option>
+                                <option value="avatar10.png">Man 4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" name="create_user" value="true">Create Account</button>
+                    
+                    {% if feedback_msg_status == "error" %}
+                        <div name="feedback_msg" class="feedback-msg error-msg">{{ feedback_msg }}</div>
+                    {% elif feedback_msg_status == "success" %}
+                        <div name="feedback_msg" class="feedback-msg success-msg">{{ feedback_msg }}</div>
+                    {% endif %}
+
+                    {% if not registration_success %}
+                        <div class="helper-link">
+                            <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+                        </div>
+                    {% else %}
+                        <div class="login-redirect-box">
+                            <p>You can now log in to your new account →</p>
+                            <a href="{{ url_for('login') }}">Login →</a>
+                        </div>
+                    {% endif %}
+                </form>
+            </fieldset>
+        </div>
+    </section>
+</div>
+
+<script>
+document.getElementById('chosen_avatar').addEventListener('change', function() {
+    document.getElementById('avatar-live-preview').src = '/static/image/avatars/' + this.value;
+});
+</script>
+{% endblock %}

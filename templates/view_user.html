@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}StoryForge | {{ user_name }}'s Channel{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/css/view_user.css">
+
+    <div class="channel-container">
+        <header class="channel-header-card">
+            <img src="/static/image/avatars/{{ usser_avatar|default('user.png', true) }}" alt="Channel Avatar" class="channel-avatar-img">
+            
+            
+                <h1 class="channel-display-name">{{ user_name }}</h1>
+                <p class="channel-handle-meta">@{{ user_name|lower|replace(' ', '') }} • 📚 {{ user_stories|length }} stories forged</p>
+                <p class="channel-bio-tag">Welcome to my creative story domain vault. Explore my library below! ✨</p>
+            </div>
+        </header>
+
+        <hr class="channel-divider">
+
+        <!-- THE CHANNEL STORIES GRID LAYOUT -->
+        <section class="channel-library-section">
+            <h2 class="section-heading-title">Uploads</h2>
+            
+            {% if user_stories %}
+                <div class="youtube-video-grid">
+                    {% for story in user_stories %}
+                        <div class="story-card-wrapper">
+                            
+                            <!-- VIDEO THUMBNAIL FRAME in 16:9 -->
+                            <a href="/view-story?story_id={{ story['story_id'] }}" class="card-thumbnail-link">
+                                {% if story['thumbnail_url'] %}
+                                    <img src="{{ story['thumbnail_url'] }}" alt="Story Cover Artwork" class="card-image-asset">
+                                {% else %}
+                                    <div class="card-fallback-asset">📖</div>
+                                {% endif %}
+                            </a>
+
+                            <!--  VIDEO DETAILS METADATA -->
+                            <div class="card-details-row">
+                                <div class="card-text-metadata">
+                                    <h3 class="card-story-title">
+                                        <a href="/view-story?story_id={{ story['story_id'] }}">
+                                            {{ story['title'] }}
+                                        </a>
+                                    </h3>
+                                    <p class="card-author-name">{{ user_name }}</p>
+                                    <p class="card-view-count-meta">✨ Shared with public</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-channel-fallback">
+                    <p>This creator hasn't published any stories to their library yet.</p>
+                </div>
+            {% endif %}
+        </section>
+
+    </div>
+{% endblock %}
