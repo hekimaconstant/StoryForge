@@ -5,9 +5,7 @@ import psycopg2
 # PATH ENFORCEMENT
 DATABASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(DATABASE_DIR, 'database.db')
-SCHEMA = os.path.join(os.path.dirname(DATABASE_DIR), 'schema.sql')
 DATABASE_URL = os.environ.get('DATABASE_URL')
-
 
 #THE DUAL COMPATIBILITY (SQLITE & POSTGRES)
 class HybridRow:
@@ -122,9 +120,11 @@ def init_db():
             os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
             connection = sqlite3.connect(DATABASE)
             
+            # Moved inside block to protect top-level production execution context
+            schema_path = os.path.join(os.path.dirname(DATABASE_DIR), 'schema.sql')
             try:
-                if os.path.exists(SCHEMA):
-                    with open(SCHEMA, mode='r', encoding='utf-8') as file:
+                if os.path.exists(schema_path):
+                    with open(schema_path, mode='r', encoding='utf-8') as file:
                         connection.executescript(file.read())
                     connection.commit()
             except Exception:
